@@ -1,0 +1,28 @@
+server:
+  port: 8900
+spring:
+  application:
+    name: ems_userService
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+        register-health-check: true
+### ribbon的负载均衡是客户端的负载均衡
+productService:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      productService:
+        loggerLevel: full
+        connectTimeout: 5000
+        readTimeout: 5000
+      default: #对其他服务的默认连接超时时长和调用超时时长
+        connectTimeout: 5000
+        readTimeout: 5000
